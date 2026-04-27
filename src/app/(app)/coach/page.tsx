@@ -1,35 +1,50 @@
 'use client'
 
+import { useState, useEffect, useCallback } from 'react'
 import { CoachOption }    from '@/components/coach/CoachOption'
 import { SessionHistory } from '@/components/coach/SessionHistory'
+import { CoachSessionType } from '@/types'
 import styles from './coach.module.css'
 
-// MOCKUP — datos de presentacion
-const MOCK_SESSIONS = [
-  {
-    id:         's1',
-    type:       'virtual'   as const,
-    status:     'completed' as const,
-    started_at: '2026-03-21T10:15:00Z',
-    ended_at:   '2026-03-21T10:20:00Z',
-  },
-  {
-    id:         's2',
-    type:       'human'     as const,
-    status:     'completed' as const,
-    started_at: '2026-03-18T09:30:00Z',
-    ended_at:   '2026-03-18T09:50:00Z',
-  },
-  {
-    id:         's3',
-    type:       'virtual'   as const,
-    status:     'completed' as const,
-    started_at: '2026-03-14T14:05:00Z',
-    ended_at:   '2026-03-14T14:09:00Z',
-  },
-]
+type SessionRow = {
+  id:         string
+  type:       'virtual' | 'human'
+  status:     'pending' | 'active' | 'completed' | 'cancelled'
+  started_at: string
+  ended_at:   string | null
+}
 
 export default function CoachPage() {
+  const [sessions,  setSessions]  = useState<SessionRow[]>([])
+  const [loading,   setLoading]   = useState(true)
+  const [creating,  setCreating]  = useState<CoachSessionType | null>(null)
+
+  const loadSessions = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res  = await fetch('/api/coach/sessions')
+      const json = await res.json()
+      if (json.ok) setSessions(json.data)
+    } catch { /* conexion fallida — no interrumpir UX */ }
+    finally { setLoading(false) }
+  }, [])
+
+  useEffect(() => { loadSessions() }, [loadSessions])
+
+  async function handleSelect(type: CoachSessionType) {
+    setCreating(type)
+    try {
+      const res  = await fetch('/api/coach/sessions', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ type }),
+      })
+      const json = await res.json()
+      if (json.ok) await loadSessions()
+    } catch { /* ignorar error de red */ }
+    finally { setCreating(null) }
+  }
+
   return (
     <>
       <header className={styles.header}>
@@ -43,14 +58,14 @@ export default function CoachPage() {
         <CoachOption
           type="virtual"
           urgency="green"
-          onSelect={() => {}}
-          isLoading={false}
+          onSelect={() => handleSelect('virtual')}
+          isLoading={creating === 'virtual'}
         />
         <CoachOption
           type="human"
           urgency="green"
-          onSelect={() => {}}
-          isLoading={false}
+          onSelect={() => handleSelect('human')}
+          isLoading={creating === 'human'}
         />
       </section>
 
@@ -84,7 +99,11 @@ export default function CoachPage() {
 
       <section aria-labelledby="history-heading" className={`${styles.card} anim-fade-up`}>
         <h2 id="history-heading" className={styles.cardTitle}>Historial reciente</h2>
-        <SessionHistory sessions={MOCK_SESSIONS} />
+        {loading ? (
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Cargando...</p>
+        ) : (
+          <SessionHistory sessions={sessions} />
+        )}
       </section>
 
       <section aria-labelledby="pro-heading" className={`${styles.proCard} anim-fade-up`}>

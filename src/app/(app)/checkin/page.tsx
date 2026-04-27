@@ -20,11 +20,29 @@ export default function CheckinPage() {
   const handleChange = useCallback((v: QuadrantValue) => setValue(v), [])
 
   async function handleSubmit() {
-    // MOCKUP — simula guardado y redirige al dashboard
     setLoading(true)
-    await new Promise(r => setTimeout(r, 800))
-    setLoading(false)
-    router.push('/dashboard')
+    setError('')
+    try {
+      const res  = await fetch('/api/checkin', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          arousal: value.arousal,
+          valence: value.valence,
+          note:    note.trim() || undefined,
+        }),
+      })
+      const json = await res.json()
+      if (!json.ok) {
+        setError(json.error ?? 'Error al guardar.')
+        setLoading(false)
+        return
+      }
+      router.push('/dashboard')
+    } catch {
+      setError('No se pudo guardar. Revisa tu conexion.')
+      setLoading(false)
+    }
   }
 
   const now = new Date().toLocaleTimeString('es-MX', {

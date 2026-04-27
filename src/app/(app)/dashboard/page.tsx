@@ -1,47 +1,57 @@
 import { StateCard }          from '@/components/dashboard/StateCard'
 import { ZoneIndicator }      from '@/components/dashboard/ZoneIndicator'
 import { RecommendationCard } from '@/components/dashboard/RecommendationCard'
-import { EmotionalLog, Recommendation } from '@/types'
+import { getCurrentUser }     from '@/lib/auth'
+import { prisma }             from '@/lib/db'
+import { getZoneStatus, getZoneLabel, getZoneExplanation, PRIOR } from '@/lib/zone'
+import { getRecommendations } from '@/lib/recommendations'
+import { ZoneProfile, ZoneStatus, Quadrant } from '@/types'
+import Link from 'next/link'
 import styles from './dashboard.module.css'
 
-// MOCKUP — datos de presentacion
-const MOCK_USER = { name: 'Sofia Ramirez' }
+export default async function DashboardPage() {
+  const user      = await getCurrentUser()
+  const firstName = user?.name?.split(' ')[0] ?? 'tu'
+  const hour      = new Date().getHours()
+  const greeting  = hour < 12 ? 'Buenos dias' : hour < 18 ? 'Buenas tardes' : 'Buenas noches'
 
-const MOCK_LOG: EmotionalLog = {
-  id:        'mock-1',
-  user_id:   'mock-user',
-  arousal:   7.2,
-  valence:   6.8,
-  zone:      'green',
-  quadrant:  'Q2',
-  timestamp: new Date(),
-}
+  let lastLog: { id: string; user_id: string; arousal: number; valence: number; zone: ZoneStatus; quadrant: Quadrant; timestamp: Date } | null = null
+  let profile: ZoneProfile = PRIOR
 
-const MOCK_RECS: Recommendation[] = [
-  {
-    id:           'r1',
-    title:        'Respiracion 4-7-8',
-    description:  'Inhala 4 segundos, retén 7 y exhala lentamente en 8. Repite 3 veces para bajar el ritmo.',
-    duration_min: 3,
-    type:         'breathing',
-    quadrant:     'Q2',
-    urgency:      'green',
-  },
-  {
-    id:           'r2',
-    title:        'Pausa activa de 5 minutos',
-    description:  'Levantate, estira hombros y cuello, camina un poco. Tu cuerpo y mente lo agradecen.',
-    duration_min: 5,
-    type:         'movement',
-    quadrant:     'all',
-    urgency:      'green',
-  },
-]
+  if (user) {
+    const [rawLog, rawProfile] = await Promise.all([
+      prisma.emotionalLog.findFirst({
+        where:   { user_id: user.id },
+        orderBy: { timestamp: 'desc' },
+      }),
+      prisma.zoneProfile.findUnique({ where: { user_id: user.id } }),
+    ])
 
-export default function DashboardPage() {
-  const firstName = MOCK_USER.name.split(' ')[0]
-  const hour = new Date().getHours()
-  const greeting = hour < 12 ? 'Buenos dias' : hour < 18 ? 'Buenas tardes' : 'Buenas noches'
+    if (rawProfile) {
+      profile = {
+        center:       { arousal: rawProfile.center_arousal, valence: rawProfile.center_valence },
+        sigma:        { arousal: rawProfile.sigma_arousal,  valence: rawProfile.sigma_valence  },
+        sample_count: rawProfile.sample_count,
+        last_updated: rawProfile.last_updated,
+      }
+    }
+
+    if (rawLog) {
+      lastLog = {
+        id:        rawLog.id,
+        user_id:   rawLog.user_id,
+        arousal:   rawLog.arousal,
+        valence:   rawLog.valence,
+        zone:      rawLog.zone     as ZoneStatus,
+        quadrant:  rawLog.quadrant as Quadrant,
+        timestamp: rawLog.timestamp,
+      }
+    }
+  }
+
+  const value      = lastLog ? { arousal: lastLog.arousal, valence: lastLog.valence } : null
+  const zoneStatus = value   ? getZoneStatus(value, profile) : null
+  const recs       = value && zoneStatus ? getRecommendations(value, zoneStatus).slice(0, 3) : []
 
   return (
     <>
@@ -51,34 +61,63 @@ export default function DashboardPage() {
           <h1 className={styles.name}>{firstName}.</h1>
         </div>
         <div className={styles.avatar} aria-hidden="true">
-          {firstName[0].toUpperCase()}
+          {firstName[0]?.toUpperCase() ?? '?'}
         </div>
       </header>
 
-      <section aria-labelledby="last-state-heading" className="anim-fade-up">
-        <h2 id="last-state-heading" className={styles.sectionTitle}>Tu estado</h2>
-        <StateCard log={MOCK_LOG} />
-      </section>
+      {lastLog && zoneStatus && value ? (
+        <>
+          <section aria-labelledby="last-state-heading" className="anim-fade-up">
+            <h2 id="last-state-heading" className={styles.sectionTitle}>Tu estado</h2>
+            <StateCard log={lastLog} />
+          </section>
 
-      <section aria-labelledby="zone-heading" className="anim-fade-up">
-        <h2 id="zone-heading" className={styles.sectionTitle}>Tu zona habitual</h2>
-        <ZoneIndicator
-          status="green"
-          label="Dentro de tu zona habitual"
-          explanation="Tu energia y agrado estan dentro de tu rango personal. Es un buen momento para mantener el ritmo."
-        />
-      </section>
+          <section aria-labelledby="zone-heading" className="anim-fade-up">
+            <h2 id="zone-heading" className={styles.sectionTitle}>Tu zona habitual</h2>
+            <ZoneIndicator
+              status={zoneStatus}
+              label={getZoneLabel(zoneStatus)}
+              explanation={getZoneExplanation(value, profile)}
+            />
+          </section>
 
-      <section aria-labelledby="recs-heading">
-        <h2 id="recs-heading" className={styles.sectionTitle}>Para ti ahora</h2>
-        <div className={styles.recList}>
-          {MOCK_RECS.map((rec, i) => (
-            <div key={rec.id} className="anim-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
-              <RecommendationCard rec={rec} />
-            </div>
-          ))}
-        </div>
-      </section>
+          {recs.length > 0 && (
+            <section aria-labelledby="recs-heading">
+              <h2 id="recs-heading" className={styles.sectionTitle}>Para ti ahora</h2>
+              <div className={styles.recList}>
+                {recs.map((rec, i) => (
+                  <div key={rec.id} className="anim-fade-up" style={{ animationDelay: `${i * 0.06}s` }}>
+                    <RecommendationCard rec={rec} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      ) : (
+        <section
+          className="anim-fade-up"
+          style={{ textAlign: 'center', padding: 'var(--space-xl) 0' }}
+        >
+          <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-md)' }}>
+            Aun no tienes ningun registro.
+          </p>
+          <Link
+            href="/checkin"
+            style={{
+              display:        'inline-block',
+              background:     'var(--color-primary)',
+              color:          'var(--text-inverse)',
+              padding:        '12px 24px',
+              borderRadius:   'var(--radius-md)',
+              fontWeight:     600,
+              textDecoration: 'none',
+            }}
+          >
+            Registrar mi primer estado
+          </Link>
+        </section>
+      )}
 
       <p className={styles.crisis}>
         Si sientes una crisis, llama a la Linea de la Vida:{' '}
