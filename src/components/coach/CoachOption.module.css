@@ -1,0 +1,109 @@
+.card {
+  background:    var(--surface-card);
+  border:        1.5px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-lg);
+  display:       flex;
+  align-items:   flex-start;
+  gap:           var(--space-md);
+  box-shadow:    var(--shadow-sm);
+  transition:    border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.card_red {
+  border-color: var(--state-red-border);
+  background:   var(--state-red-bg);
+}
+
+.card_yellow {
+  border-color: var(--state-yellow-border);
+}
+
+.iconWrap {
+  width:           48px;
+  height:          48px;
+  border-radius:   12px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+}
+
+.icon_green  { background: var(--color-primary-soft);  color: var(--color-primary); }
+.icon_yellow { background: var(--state-yellow-bg);     color: var(--state-yellow); }
+.icon_red    { background: var(--state-red-bg);        color: var(--state-red); }
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.label {
+  font-size:   1rem;
+  font-weight: 700;
+  margin:      0;
+  color:       var(--text-primary);
+}
+
+.description {
+  font-size:   0.875rem;
+  line-height: 1.5;
+  color:       var(--text-secondary);
+  margin:      0;
+}
+
+.disclaimer {
+  font-size:  0.8125rem;
+  color:      var(--text-muted);
+  font-style: italic;
+  margin:     0;
+}
+
+/* ── CTA ──────────────────────────────────────────────────────── */
+.cta {
+  display:        inline-flex;
+  align-items:    center;
+  justify-content: space-between;
+  gap:            var(--space-sm);
+  width:          100%;
+  padding:        10px var(--space-md);
+  border-radius:  var(--border-radius-md);
+  font-size:      0.875rem;
+  font-weight:    600;
+  cursor:         pointer;
+  border:         none;
+  transition:     background var(--transition-fast), opacity var(--transition-fast);
+  min-height:     44px; /* táctil mínimo */
+}
+
+.cta:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.cta_green {
+  background: var(--color-primary-soft);
+  color:      var(--color-night);
+}
+.cta_green:hover:not(:disabled) { background: var(--color-primary); color: var(--text-inverse); }
+
+.cta_yellow {
+  background: var(--state-yellow-bg);
+  color:      var(--state-yellow);
+  border:     1px solid var(--state-yellow-border);
+}
+.cta_yellow:hover:not(:disabled) { background: var(--state-yellow); color: var(--text-inverse); }
+
+.cta_red {
+  background: var(--state-red);
+  color:      var(--text-inverse);
+}
+.cta_red:hover:not(:disabled) { opacity: 0.88; }
+
+/* ── Spinner ─────────────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spinner {
+  animation:  spin 0.8s linear infinite;
+  flex-shrink: 0;
+}

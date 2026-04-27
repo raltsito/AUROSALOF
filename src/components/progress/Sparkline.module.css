@@ -1,0 +1,13 @@
+.svg {
+  display:    block;
+  overflow:   visible;
+}
+
+.empty {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       0.8125rem;
+  color:           var(--text-muted);
+  font-style:      italic;
+}

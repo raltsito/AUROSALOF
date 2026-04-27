@@ -1,0 +1,280 @@
+/* ═══════════════════════════════════════════════════════════════
+   ARUOSAL — Design System
+   Soporta dos temas via atributo data-theme en <html>
+   data-theme="calm"  → Calm Pastel (default)
+   data-theme="intra" → INTRA Brand
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+/* ─── Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+img, video, svg { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font: inherit; }
+input, textarea, select { font: inherit; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; }
+
+/* ─── Tema A: Calm Pastel (default) ─────────────────────────── */
+:root,
+[data-theme="calm"] {
+  /* Paleta principal */
+  --color-primary:       #DD98D1;
+  --color-primary-soft:  #F5E8F3;
+  --color-primary-hover: #d085c4;
+  --color-secondary:     #A8A3C8;
+  --color-accent:        #B58B80;
+
+  /* Neutrales */
+  --color-dark:          #060F16;
+  --color-slate:         #5A6B70;
+  --color-mist:          #ADC7D0;
+  --color-fog:           #DEEAED;
+  --color-night:         #443956;
+
+  /* Superficies */
+  --surface-bg:          #F4F8F9;
+  --surface-card:        #FFFFFF;
+  --surface-card-alt:    #DEEAED;
+  --surface-input:       #FFFFFF;
+  --surface-overlay:     rgba(6, 15, 22, 0.4);
+
+  /* Estados de zona (NUNCA usados en el cuadrante de medicion) */
+  --state-green:         #5BA07A;
+  --state-green-bg:      #E8F5EE;
+  --state-green-border:  #A3D4B8;
+  --state-yellow:        #C49A38;
+  --state-yellow-bg:     #FBF4E0;
+  --state-yellow-border: #E8CC80;
+  --state-red:           #C45E5E;
+  --state-red-bg:        #FAE8E8;
+  --state-red-border:    #E0A0A0;
+
+  /* Texto */
+  --text-primary:        #060F16;
+  --text-secondary:      #5A6B70;
+  --text-muted:          #9BB8C0;
+  --text-inverse:        #FFFFFF;
+  --text-link:           #9878B8;
+
+  /* Bordes */
+  --border-color:        #D0E2E8;
+  --border-focus:        #DD98D1;
+  --border-radius-sm:    8px;
+  --border-radius-md:    16px;
+  --border-radius-lg:    24px;
+  --border-radius-pill:  9999px;
+
+  /* Sombras */
+  --shadow-sm:           0 1px 3px rgba(6, 15, 22, 0.07);
+  --shadow-md:           0 4px 16px rgba(6, 15, 22, 0.09);
+  --shadow-lg:           0 8px 32px rgba(6, 15, 22, 0.12);
+  --shadow-focus:        0 0 0 3px rgba(221, 152, 209, 0.35);
+
+  /* Espaciado */
+  --space-xs:            4px;
+  --space-sm:            8px;
+  --space-md:            16px;
+  --space-lg:            24px;
+  --space-xl:            40px;
+  --space-2xl:           64px;
+
+  /* Cuadrante — SIEMPRE neutral, nunca temado */
+  --quadrant-bg:         #F5F5F5;
+  --quadrant-grid:       #B8B8B8;
+  --quadrant-point:      #2E2E2E;
+  --quadrant-label:      #4A4A4A;
+  --quadrant-zone:       rgba(91, 160, 122, 0.12);
+  --quadrant-zone-border:rgba(91, 160, 122, 0.35);
+
+  /* Transiciones */
+  --transition-fast:     0.15s ease;
+  --transition-base:     0.25s ease;
+  --transition-slow:     0.4s ease;
+}
+
+/* ─── Tema B: INTRA Brand ────────────────────────────────────── */
+[data-theme="intra"] {
+  --color-primary:       #06C4CC;
+  --color-primary-soft:  #D7F3F4;
+  --color-primary-hover: #04adb5;
+  --color-secondary:     #04A8AF;
+  --color-accent:        #F71A21;
+
+  --color-dark:          #1F191B;
+  --color-slate:         #4A4548;
+  --color-mist:          #A8C4C6;
+  --color-fog:           #D7F3F4;
+  --color-night:         #1F191B;
+
+  --surface-bg:          #F0FAFB;
+  --surface-card:        #FFFFFF;
+  --surface-card-alt:    #D7F3F4;
+  --surface-input:       #FFFFFF;
+  --surface-overlay:     rgba(31, 25, 27, 0.4);
+
+  --state-green:         #06C4CC;
+  --state-green-bg:      #D7F3F4;
+  --state-green-border:  #80DDE0;
+  --state-yellow:        #C49A38;
+  --state-yellow-bg:     #FBF4E0;
+  --state-yellow-border: #E8CC80;
+  --state-red:           #F71A21;
+  --state-red-bg:        #FFEDED;
+  --state-red-border:    #F5A0A0;
+
+  --text-primary:        #1F191B;
+  --text-secondary:      #4A4548;
+  --text-muted:          #8A9A9B;
+  --text-inverse:        #FFFFFF;
+  --text-link:           #04A8AF;
+
+  --border-color:        #C0D8DA;
+  --border-focus:        #06C4CC;
+  --shadow-focus:        0 0 0 3px rgba(6, 196, 204, 0.3);
+
+  /* Cuadrante — siempre neutral */
+  --quadrant-bg:         #F5F5F5;
+  --quadrant-grid:       #B8B8B8;
+  --quadrant-point:      #2E2E2E;
+  --quadrant-label:      #4A4A4A;
+  --quadrant-zone:       rgba(6, 196, 204, 0.10);
+  --quadrant-zone-border:rgba(6, 196, 204, 0.35);
+}
+
+/* ─── Modo oscuro ────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  [data-theme="calm"] {
+    --surface-bg:          #0D1C23;
+    --surface-card:        #1A2C34;
+    --surface-card-alt:    #1E3540;
+    --surface-input:       #162430;
+    --text-primary:        #E8F0F2;
+    --text-secondary:      #ADC7D0;
+    --text-muted:          #6A8A90;
+    --border-color:        #2A3F48;
+    --color-primary:       #E8AADC;
+    --color-primary-soft:  #2A1E28;
+
+    --state-green-bg:      #122A1E;
+    --state-green-border:  #1E4A30;
+    --state-green:         #6DC98F;
+    --state-yellow-bg:     #2A2010;
+    --state-yellow-border: #4A3818;
+    --state-yellow:        #E0B84A;
+    --state-red-bg:        #2A1212;
+    --state-red-border:    #4A2020;
+    --state-red:           #E07070;
+  }
+  [data-theme="intra"] {
+    --surface-bg:          #141010;
+    --surface-card:        #231D1F;
+    --surface-card-alt:    #2A2325;
+    --surface-input:       #1E1819;
+    --text-primary:        #F0F4F4;
+    --text-secondary:      #9BA8A9;
+    --text-muted:          #5A6A6B;
+    --border-color:        #3A2E30;
+    --color-primary:       #04A8AF;
+    --color-primary-soft:  #0A2426;
+
+    --state-green-bg:      #0A2426;
+    --state-green-border:  #0F3840;
+    --state-green:         #04C4CC;
+    --state-yellow-bg:     #2A2010;
+    --state-yellow-border: #4A3818;
+    --state-yellow:        #E0B84A;
+    --state-red-bg:        #2A1010;
+    --state-red-border:    #4A1818;
+    --state-red:           #F54A50;
+  }
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background:  var(--surface-bg);
+  color:       var(--text-primary);
+  line-height: 1.5;
+  min-height:  100svh;
+  transition:  background var(--transition-slow), color var(--transition-slow);
+}
+
+/* ─── Tipografia ─────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+h3 { font-size: 1.125rem; }
+h4 { font-size: 1rem; }
+
+p { color: var(--text-secondary); line-height: 1.6; }
+small { font-size: 0.8125rem; }
+
+/* ─── Accesibilidad ──────────────────────────────────────────── */
+:focus-visible {
+  outline:        2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius:  4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Layout ─────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.container--wide  { max-width: 900px; }
+.container--fluid { max-width: 100%; }
+
+/* ─── Animaciones ────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% { transform: scale(1); box-shadow: var(--shadow-md); }
+  50%       { transform: scale(1.02); box-shadow: var(--shadow-lg); }
+}
+
+.anim-fade-up  { animation: fadeUp   0.4s ease-out both; }
+.anim-fade-in  { animation: fadeIn   0.3s ease-out both; }
+.anim-scale-in { animation: scaleIn  0.3s ease-out both; }
+
+.anim-fade-up:nth-child(2) { animation-delay: 0.05s; }
+.anim-fade-up:nth-child(3) { animation-delay: 0.10s; }
+.anim-fade-up:nth-child(4) { animation-delay: 0.15s; }

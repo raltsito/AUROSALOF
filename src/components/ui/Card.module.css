@@ -1,0 +1,42 @@
+.card {
+  background:    var(--surface-card);
+  border:        1.5px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  box-shadow:    var(--shadow-sm);
+  width:         100%;
+  text-align:    left;
+  display:       block;
+  transition:    box-shadow var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+/* Padding */
+.pad-sm { padding: var(--space-sm) var(--space-md); }
+.pad-md { padding: var(--space-md); }
+.pad-lg { padding: var(--space-lg); }
+
+/* Variantes */
+.alt {
+  background:  var(--surface-card-alt);
+  border-color: transparent;
+}
+
+.ghost {
+  background:  transparent;
+  border-color: transparent;
+  box-shadow:  none;
+}
+
+/* Interactivo */
+.clickable {
+  cursor: pointer;
+  font:   inherit;
+}
+.clickable:hover {
+  box-shadow:   var(--shadow-md);
+  border-color: var(--color-primary);
+  transform:    translateY(-1px);
+}
+.clickable:active {
+  transform:  translateY(0);
+  box-shadow: var(--shadow-sm);
+}

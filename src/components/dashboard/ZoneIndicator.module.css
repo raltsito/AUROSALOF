@@ -1,0 +1,57 @@
+.indicator {
+  border-radius: var(--border-radius-lg);
+  border:        1.5px solid;
+  padding:       var(--space-md);
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--space-sm);
+  animation:     fadeUp 0.4s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Variantes de zona — usan icono + texto + fondo, nunca solo color */
+.green {
+  background:   var(--state-green-bg);
+  border-color: var(--state-green-border);
+}
+.yellow {
+  background:   var(--state-yellow-bg);
+  border-color: var(--state-yellow-border);
+}
+.red {
+  background:   var(--state-red-bg);
+  border-color: var(--state-red-border);
+}
+
+.header {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-sm);
+}
+
+.iconWrap {
+  font-size:   1.25rem;
+  line-height: 1;
+}
+
+.green  .iconWrap { color: var(--state-green); }
+.yellow .iconWrap { color: var(--state-yellow); }
+.red    .iconWrap { color: var(--state-red); }
+
+.label {
+  font-size:   0.9375rem;
+  font-weight: 600;
+  color:       var(--text-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.explanation {
+  font-size:   0.8125rem;
+  line-height: 1.5;
+  color:       var(--text-primary);
+  margin:      0;
+}

@@ -1,0 +1,18 @@
+.shell {
+  display:        flex;
+  flex-direction: column;
+  min-height:     100svh;
+  max-width:      480px;
+  margin:         0 auto;
+  position:       relative;
+}
+
+.main {
+  flex:           1;
+  padding:        var(--space-lg) var(--space-md);
+  padding-bottom: calc(80px + var(--space-lg)); /* espacio para bottom nav */
+  overflow-y:     auto;
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-md);
+}

@@ -1,0 +1,142 @@
+// Prisma Schema — ARUOSAL Sprint 2
+// Dev: SQLite   Prod: PostgreSQL (cambiar provider y DATABASE_URL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+model User {
+  id         String  @id @default(cuid())
+  name       String
+  email      String  @unique
+  password   String  // Argon2id hash (Sprint 2: migrado desde bcrypt)
+  company_id String?
+  shift      String? // "morning" | "afternoon" | "night"
+  theme      String  @default("calm") // "calm" | "intra"
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // Relaciones
+  consent             Consent?
+  emotional_logs      EmotionalLog[]
+  zone_profile        ZoneProfile?
+  recommendation_logs RecommendationLog[]
+  otp_codes           OtpCode[]
+  coach_sessions      CoachSession[]
+
+  @@map("users")
+}
+
+// ─── Consentimiento ───────────────────────────────────────────────────────────
+// Registro inmutable LFPDPPP — append-only por diseno
+
+model Consent {
+  id           String   @id @default(cuid())
+  user_id      String   @unique
+  timestamp    DateTime @default(now())
+  version      String   @default("1.0")
+  text_hash    String   // SHA-256 del texto canonico del aviso
+  otp_verified Boolean  @default(false)
+  ip_address   String?  // IP registrada al momento del consentimiento
+  device_id    String?  // UUID del dispositivo (enviado por el cliente)
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("consents")
+}
+
+// ─── OTP Codes ────────────────────────────────────────────────────────────────
+// Codigos de un solo uso para consentimiento y futuros flujos MFA
+
+model OtpCode {
+  id         String   @id @default(cuid())
+  user_id    String
+  code_hash  String   // SHA-256 del codigo de 6 digitos
+  purpose    String   // "consent" | "login_mfa" (extensible)
+  expires_at DateTime
+  attempts   Int      @default(0)
+  used       Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, purpose])
+  @@map("otp_codes")
+}
+
+// ─── Logs emocionales ─────────────────────────────────────────────────────────
+
+model EmotionalLog {
+  id             String   @id @default(cuid())
+  user_id        String
+  arousal        Float    // 1.0–10.0 (eje Y: baja–alta energia)
+  valence        Float    // 1.0–10.0 (eje X: poco–mucho agrado)
+  zone           String   // "green" | "yellow" | "red"
+  quadrant       String   // "Q1" | "Q2" | "Q3" | "Q4"
+  note_encrypted String?  // Nota cifrada AES-256-GCM (Sprint 2)
+  timestamp      DateTime @default(now())
+
+  user                User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  recommendation_logs RecommendationLog[]
+
+  @@index([user_id, timestamp])
+  @@map("emotional_logs")
+}
+
+// ─── Perfil de zona optima ────────────────────────────────────────────────────
+
+model ZoneProfile {
+  id             String   @id @default(cuid())
+  user_id        String   @unique
+  center_arousal Float    @default(5.2)
+  center_valence Float    @default(6.1)
+  sigma_arousal  Float    @default(1.5)
+  sigma_valence  Float    @default(1.8)
+  sample_count   Int      @default(0)
+  last_updated   DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("zone_profiles")
+}
+
+// ─── Logs de recomendaciones ──────────────────────────────────────────────────
+
+model RecommendationLog {
+  id                String   @id @default(cuid())
+  user_id           String
+  emotional_log_id  String
+  recommendation_id String   // ID de la recomendacion de la biblioteca
+  action            String   // "shown" | "started" | "completed" | "dismissed"
+  timestamp         DateTime @default(now())
+
+  user          User         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  emotional_log EmotionalLog @relation(fields: [emotional_log_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@map("recommendation_logs")
+}
+
+// ─── Sesiones de coach ────────────────────────────────────────────────────────
+
+model CoachSession {
+  id         String    @id @default(cuid())
+  user_id    String
+  type       String    // "virtual" | "human"
+  status     String    @default("pending") // "pending" | "active" | "completed" | "cancelled"
+  notes_enc  String?   // Notas cifradas AES-256-GCM (solo acceso con opt-in del usuario)
+  started_at DateTime  @default(now())
+  ended_at   DateTime?
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id, started_at])
+  @@map("coach_sessions")
+}

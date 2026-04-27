@@ -1,0 +1,117 @@
+/* Layout compartido para todas las pantallas de autenticacion */
+
+.page {
+  min-height:      100svh;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         var(--space-md);
+  background:      var(--surface-bg);
+}
+
+.card {
+  width:          100%;
+  max-width:      420px;
+  background:     var(--surface-card);
+  border:         1.5px solid var(--border-color);
+  border-radius:  var(--border-radius-lg);
+  padding:        var(--space-xl) var(--space-lg);
+  box-shadow:     var(--shadow-lg);
+  animation:      scaleIn 0.35s ease-out;
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-lg);
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Marca / logo */
+.brand {
+  text-align:     center;
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            var(--space-sm);
+}
+
+.logo {
+  width:         52px;
+  height:        52px;
+  background:    var(--color-primary);
+  border-radius: 14px;
+  margin-bottom: var(--space-xs);
+}
+
+.title {
+  font-size: 1.5rem;
+  color:     var(--text-primary);
+  margin:    0;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color:     var(--text-secondary);
+  margin:    0;
+}
+
+/* Formulario */
+.form {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-md);
+}
+
+.errorBanner {
+  background:   var(--state-red-bg);
+  border:       1px solid var(--state-red-border);
+  border-radius: var(--border-radius-sm);
+  color:        var(--state-red);
+  font-size:    0.875rem;
+  padding:      var(--space-sm) var(--space-md);
+  margin:       0;
+}
+
+.successBanner {
+  background:   var(--state-green-bg);
+  border:       1px solid var(--state-green-border);
+  border-radius: var(--border-radius-sm);
+  color:        var(--state-green);
+  font-size:    0.875rem;
+  padding:      var(--space-sm) var(--space-md);
+  margin:       0;
+}
+
+/* Footer del card */
+.footer {
+  text-align: center;
+  font-size:  0.875rem;
+  color:      var(--text-secondary);
+  margin:     0;
+}
+
+.link {
+  color:           var(--text-link);
+  font-weight:     500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link:hover { opacity: 0.8; }
+
+/* Divider */
+.divider {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-sm);
+  color:       var(--text-muted);
+  font-size:   0.8125rem;
+}
+.divider::before,
+.divider::after {
+  content:    '';
+  flex:       1;
+  height:     1px;
+  background: var(--border-color);
+}

@@ -1,0 +1,104 @@
+/* ═══════════════════════════════════════════════════════════
+   EmotionalQuadrant — colores SIEMPRE neutrales (#F5F5F5 base)
+   Nunca usa tokens del tema activo en este componente.
+   ═══════════════════════════════════════════════════════════ */
+
+.quadrant {
+  position:     relative;
+  width:        100%;
+  aspect-ratio: 1 / 1;
+  background:   var(--quadrant-bg);
+  border-radius: 20px;
+  border:       1.5px solid #DDDDDD;
+  cursor:       crosshair;
+  user-select:  none;
+  touch-action: none;
+  overflow:     hidden;
+  box-shadow:   inset 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.quadrant:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.quadrant.disabled {
+  cursor:  default;
+  opacity: 0.65;
+}
+
+/* SVG overlay */
+.svg {
+  position:       absolute;
+  inset:          0;
+  width:          100%;
+  height:         100%;
+  pointer-events: none;
+}
+
+.gridLine {
+  stroke:            var(--quadrant-grid);
+  stroke-width:      0.5;
+  stroke-dasharray:  2.5 2.5;
+  vector-effect:     non-scaling-stroke;
+}
+
+.zoneArea {
+  fill:          var(--quadrant-zone);
+  stroke:        var(--quadrant-zone-border);
+  stroke-width:  0.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Etiquetas de eje */
+.label {
+  position:       absolute;
+  font-size:      0.5625rem;
+  font-weight:    500;
+  color:          var(--quadrant-label);
+  pointer-events: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space:    nowrap;
+}
+
+.top    { top: 8px;    left: 50%;  transform: translateX(-50%); }
+.bottom { bottom: 8px; left: 50%;  transform: translateX(-50%); }
+.left   { left: 8px;   top: 50%;   transform: translateY(-50%) rotate(-90deg); transform-origin: center; }
+.right  { right: 8px;  top: 50%;   transform: translateY(-50%) rotate(90deg);  transform-origin: center; }
+
+/* Punto draggable */
+.point {
+  position:      absolute;
+  width:         28px;
+  height:        28px;
+  background:    var(--quadrant-point);
+  border-radius: 50%;
+  transform:     translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow:    0 2px 8px rgba(0,0,0,0.28), 0 0 0 3px rgba(255,255,255,0.6);
+  transition:    left 0.08s ease, top 0.08s ease;
+  will-change:   left, top;
+}
+
+.quadrant:not(.disabled):active .point {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,255,255,0.7);
+  width:      32px;
+  height:     32px;
+}
+
+/* Coordenadas en esquina inferior derecha */
+.coords {
+  position:   absolute;
+  bottom:     8px;
+  right:      10px;
+  display:    flex;
+  gap:        10px;
+  font-size:  0.5625rem;
+  color:      var(--quadrant-label);
+  background: rgba(255,255,255,0.85);
+  padding:    2px 8px;
+  border-radius: 20px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}

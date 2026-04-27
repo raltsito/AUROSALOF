@@ -1,0 +1,78 @@
+.container {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-md);
+}
+
+.row {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-sm);
+}
+
+.iconWrap {
+  width:           28px;
+  height:          28px;
+  border-radius:   8px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  flex-shrink:     0;
+}
+
+.icon_green  { background: var(--state-green-bg);  color: var(--state-green); }
+.icon_yellow { background: var(--state-yellow-bg); color: var(--state-yellow); }
+.icon_red    { background: var(--state-red-bg);    color: var(--state-red); }
+
+.barCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.barHeader {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     baseline;
+}
+
+.zoneLabel {
+  font-size:   0.8125rem;
+  font-weight: 500;
+  color:       var(--text-secondary);
+}
+
+.percent {
+  font-size:   0.8125rem;
+  font-weight: 600;
+  color:       var(--text-primary);
+}
+
+.track {
+  width:         100%;
+  height:        8px;
+  background:    var(--surface-bg);
+  border-radius: var(--border-radius-pill);
+  overflow:      hidden;
+  border:        1px solid var(--border-color);
+}
+
+.fill {
+  height:        100%;
+  border-radius: var(--border-radius-pill);
+  transition:    width 0.6s ease-out;
+  min-width:     2px;
+}
+
+.fill_green  { background: var(--state-green); }
+.fill_yellow { background: var(--state-yellow); }
+.fill_red    { background: var(--state-red); }
+
+.empty {
+  font-size:   0.875rem;
+  color:       var(--text-muted);
+  font-style:  italic;
+  text-align:  center;
+  margin:      0;
+}

@@ -1,0 +1,226 @@
+/* ── Encabezado ─────────────────────────────────────────────────── */
+.header {
+  display:         flex;
+  align-items:     flex-start;
+  justify-content: space-between;
+  margin-bottom:   var(--space-xs);
+}
+
+.greeting {
+  font-size:   0.875rem;
+  color:       var(--text-muted);
+  margin:      0;
+}
+
+.name {
+  font-size:   1.75rem;
+  margin:      0;
+  color:       var(--text-primary);
+}
+
+/* ── Badge de tendencia ─────────────────────────────────────────── */
+.trendBadge {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           5px;
+  padding:       6px 12px;
+  border-radius: var(--border-radius-pill);
+  font-size:     0.8125rem;
+  font-weight:   600;
+  margin-top:    4px;
+}
+
+.trend_improving {
+  background: var(--state-green-bg);
+  color:      var(--state-green);
+  border:     1px solid var(--state-green-border);
+}
+
+.trend_stable {
+  background: var(--color-primary-soft);
+  color:      var(--color-night);
+  border:     1px solid var(--color-mist);
+}
+
+.trend_declining {
+  background: var(--state-yellow-bg);
+  color:      var(--state-yellow);
+  border:     1px solid var(--state-yellow-border);
+}
+
+.trend_insufficient_data {
+  background: var(--surface-bg);
+  color:      var(--text-muted);
+  border:     1px solid var(--border-color);
+}
+
+/* ── Tarjeta base ───────────────────────────────────────────────── */
+.card {
+  background:    var(--surface-card);
+  border:        1.5px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-lg);
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--space-md);
+  box-shadow:    var(--shadow-sm);
+}
+
+.cardTitle {
+  font-size:   1rem;
+  font-weight: 700;
+  margin:      0;
+}
+
+.cardSubtitle {
+  font-size:   0.8125rem;
+  color:       var(--text-muted);
+  margin:      0;
+  margin-top:  -8px;
+}
+
+/* ── Sparkline ──────────────────────────────────────────────────── */
+.sparklineWrap {
+  display:         flex;
+  justify-content: center;
+  overflow:        hidden;
+}
+
+.sparklineLegend {
+  display:     flex;
+  align-items: center;
+  gap:         var(--space-md);
+  font-size:   0.75rem;
+  color:       var(--text-muted);
+  justify-content: center;
+}
+
+.legendDot {
+  display:       inline-block;
+  width:         8px;
+  height:        8px;
+  border-radius: 50%;
+}
+
+/* ── Métricas ───────────────────────────────────────────────────── */
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap:     var(--space-md);
+}
+
+.metricCard {
+  background:    var(--surface-card);
+  border:        1.5px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-md) var(--space-md) var(--space-md);
+  text-align:    center;
+  box-shadow:    var(--shadow-sm);
+}
+
+.metricValue {
+  font-family:  'Plus Jakarta Sans', sans-serif;
+  font-size:    2rem;
+  font-weight:  700;
+  color:        var(--text-primary);
+  line-height:  1;
+  margin-bottom: 4px;
+}
+
+.metricValueGreen { color: var(--state-green); }
+
+.metricLabel {
+  font-size:   0.8125rem;
+  font-weight: 500;
+  color:       var(--text-secondary);
+}
+
+.metricSub {
+  font-size:   0.75rem;
+  color:       var(--text-muted);
+  margin-top:  4px;
+}
+
+/* ── Insight empático ───────────────────────────────────────────── */
+.insightCard {
+  background:    var(--color-primary-soft);
+  border:        1.5px solid rgba(221, 152, 209, 0.3);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-md) var(--space-lg);
+  display:       flex;
+  align-items:   flex-start;
+  gap:           var(--space-md);
+}
+
+[data-theme="intra"] .insightCard {
+  background: var(--color-primary-soft);
+  border-color: rgba(6, 196, 204, 0.25);
+}
+
+.insightIcon {
+  width:           36px;
+  height:          36px;
+  background:      var(--surface-card);
+  border-radius:   10px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  color:           var(--color-primary);
+  flex-shrink:     0;
+  box-shadow:      var(--shadow-sm);
+}
+
+.insightText {
+  font-size:   0.9375rem;
+  line-height: 1.6;
+  color:       var(--text-primary);
+  margin:      0;
+  padding-top: 6px;
+}
+
+/* ── Alerta de persistencia ─────────────────────────────────────── */
+.persistenceAlert {
+  background:    var(--state-yellow-bg);
+  border:        1.5px solid var(--state-yellow-border);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-md) var(--space-lg);
+  display:       flex;
+  align-items:   flex-start;
+  gap:           var(--space-md);
+  color:         var(--state-yellow);
+}
+
+.persistenceTitle {
+  font-size:   0.9375rem;
+  font-weight: 600;
+  color:       var(--state-yellow);
+  margin:      0 0 4px;
+}
+
+.persistenceText {
+  font-size:   0.875rem;
+  color:       var(--text-secondary);
+  margin:      0;
+}
+
+/* ── Pie de página ──────────────────────────────────────────────── */
+.modelNote {
+  font-size:  0.8125rem;
+  color:      var(--text-muted);
+  text-align: center;
+  margin:     0;
+}
+
+.crisis {
+  font-size:  0.8125rem;
+  color:      var(--text-muted);
+  text-align: center;
+  margin:     0;
+}
+
+.crisisLink {
+  color:           var(--text-link);
+  font-weight:     500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

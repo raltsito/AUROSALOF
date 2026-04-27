@@ -1,0 +1,158 @@
+/* ── Encabezado ─────────────────────────────────────────────────── */
+.header {
+  margin-bottom: var(--space-xs);
+}
+
+.title {
+  font-size: 1.75rem;
+  margin:    0;
+  color:     var(--text-primary);
+}
+
+.subtitle {
+  font-size:  0.9375rem;
+  color:      var(--text-secondary);
+  margin:     4px 0 0;
+}
+
+/* ── Opciones ───────────────────────────────────────────────────── */
+.options {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-md);
+}
+
+/* ── Tarjeta base ───────────────────────────────────────────────── */
+.card {
+  background:    var(--surface-card);
+  border:        1.5px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-lg);
+  display:       flex;
+  flex-direction: column;
+  gap:           var(--space-md);
+  box-shadow:    var(--shadow-sm);
+}
+
+.cardTitle {
+  font-size:   1rem;
+  font-weight: 700;
+  margin:      0;
+  color:       var(--text-primary);
+}
+
+/* ── Guía de uso ────────────────────────────────────────────────── */
+.guideList {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-md);
+}
+
+.guideItem {
+  display:     flex;
+  align-items: flex-start;
+  gap:         var(--space-sm);
+}
+
+.guideIcon {
+  width:           32px;
+  height:          32px;
+  background:      var(--color-primary-soft);
+  border-radius:   8px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  color:           var(--color-primary);
+  flex-shrink:     0;
+}
+
+.guideText {
+  font-size:   0.875rem;
+  line-height: 1.55;
+  color:       var(--text-secondary);
+  margin:      0;
+  padding-top: 6px;
+}
+
+.guideText strong {
+  color:       var(--text-primary);
+  font-weight: 600;
+}
+
+/* ── Skeleton loader ────────────────────────────────────────────── */
+.loadingRow {
+  display:        flex;
+  flex-direction: column;
+  gap:            var(--space-sm);
+  padding:        var(--space-sm) 0;
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+
+.skeletonLine {
+  height:           14px;
+  width:            100%;
+  border-radius:    var(--border-radius-pill);
+  background:       linear-gradient(90deg, var(--surface-bg) 25%, var(--border-color) 50%, var(--surface-bg) 75%);
+  background-size:  200% 100%;
+  animation:        shimmer 1.2s ease-in-out infinite;
+}
+
+/* ── Tarjeta de apoyo profesional ──────────────────────────────── */
+.proCard {
+  background:    var(--surface-card);
+  border:        1.5px solid var(--color-mist);
+  border-radius: var(--border-radius-lg);
+  padding:       var(--space-lg);
+  display:       flex;
+  align-items:   flex-start;
+  gap:           var(--space-md);
+  box-shadow:    var(--shadow-sm);
+}
+
+.proIcon {
+  width:           44px;
+  height:          44px;
+  background:      var(--color-primary-soft);
+  border-radius:   12px;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  color:           var(--color-primary);
+  flex-shrink:     0;
+}
+
+.proTitle {
+  font-size:   1rem;
+  font-weight: 700;
+  margin:      0 0 6px;
+  color:       var(--text-primary);
+}
+
+.proText {
+  font-size:   0.875rem;
+  line-height: 1.55;
+  color:       var(--text-secondary);
+  margin:      0 0 var(--space-sm);
+}
+
+.proLink {
+  display:         inline-block;
+  font-size:       0.875rem;
+  font-weight:     600;
+  color:           var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Descargo ───────────────────────────────────────────────────── */
+.disclaimer {
+  font-size:  0.75rem;
+  color:      var(--text-muted);
+  text-align: center;
+  margin:     0;
+  line-height: 1.5;
+}

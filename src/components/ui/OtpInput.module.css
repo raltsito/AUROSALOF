@@ -1,0 +1,66 @@
+.row {
+  display:         flex;
+  gap:             var(--space-sm);
+  justify-content: center;
+}
+
+.rowError .box {
+  border-color: var(--state-red);
+}
+
+.box {
+  width:          48px;
+  height:         56px;
+  border:         2px solid var(--border-color);
+  border-radius:  var(--border-radius-md);
+  background:     var(--surface-input);
+  color:          var(--text-primary);
+  font-family:    'Plus Jakarta Sans', sans-serif;
+  font-size:      1.5rem;
+  font-weight:    700;
+  text-align:     center;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow   var(--transition-fast),
+    background   var(--transition-fast);
+  appearance:     textfield;
+  -moz-appearance: textfield;
+}
+
+.box::-webkit-inner-spin-button,
+.box::-webkit-outer-spin-button {
+  appearance: none;
+}
+
+.box:focus {
+  outline:      none;
+  border-color: var(--border-focus);
+  box-shadow:   var(--shadow-focus);
+}
+
+.boxFilled {
+  background:   var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+
+.boxError {
+  border-color: var(--state-red) !important;
+  background:   var(--state-red-bg);
+  box-shadow:   0 0 0 3px rgba(196, 94, 94, 0.2);
+}
+
+.box:disabled {
+  opacity:    0.5;
+  cursor:     not-allowed;
+  background: var(--surface-bg);
+}
+
+/* Táctil: asegurar 44pt mínimo */
+@media (max-width: 390px) {
+  .box {
+    width:     40px;
+    height:    52px;
+    font-size: 1.25rem;
+  }
+  .row { gap: var(--space-xs); }
+}
