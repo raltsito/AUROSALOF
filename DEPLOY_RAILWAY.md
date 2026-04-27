@@ -17,6 +17,11 @@ JWT_EXPIRES_IN=7d
 ENCRYPTION_KEY=
 NEXT_PUBLIC_APP_URL=https://tu-dominio.railway.app
 NEXT_PUBLIC_THEME=calm
+SMTP_HOST=smtp.hostinger.com
+SMTP_PORT=465
+SMTP_USER=contacto@tudominio.com
+SMTP_PASS=
+SMTP_FROM=ARUOSAL <contacto@tudominio.com>
 ```
 
 Genera los secretos localmente:
@@ -39,4 +44,10 @@ El comando de arranque ejecuta `prisma db push` antes de iniciar Next.js para cr
 
 ## 4. Correo OTP
 
-El envio de correo todavia no tiene proveedor activo en produccion. Antes de usar el flujo de consentimiento con OTP real, conecta un proveedor como Resend o SMTP en `src/lib/email.ts`.
+El envio de OTP usa SMTP. Si usas Hostinger Email, revisa el buzon en hPanel y configura:
+
+- `SMTP_HOST`: `smtp.hostinger.com`
+- `SMTP_PORT`: `465`
+- `SMTP_USER`: correo completo del buzon
+- `SMTP_PASS`: password del buzon
+- `SMTP_FROM`: remitente, por ejemplo `ARUOSAL <contacto@tudominio.com>`

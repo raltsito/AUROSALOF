@@ -1,44 +1,33 @@
-// Servicio de email — ARUOSAL Sprint 2
-// Abstracción sobre proveedores externos.
-// Dev: imprime en consola (sin red).
-// Prod: configurar proveedor vía ENV (Resend recomendado por su SDK limpio).
-//
-// Para activar en producción:
-//   npm install resend
-//   Agregar RESEND_API_KEY y EMAIL_FROM a .env.production
-
-// ─── Tipos ────────────────────────────────────────────────────────────────────
+import nodemailer from 'nodemailer'
 
 export interface EmailPayload {
-  to:      string
+  to: string
   subject: string
-  html:    string
-  text:    string
+  html: string
+  text: string
 }
 
 export interface EmailResult {
-  ok:     boolean
+  ok: boolean
   error?: string
 }
 
-// ─── Plantillas ───────────────────────────────────────────────────────────────
-
-/** Plantilla del email de verificación OTP para consentimiento */
 export function buildOtpEmail(opts: { code: string; name: string }): Pick<EmailPayload, 'subject' | 'html' | 'text'> {
   const { code, name } = opts
+
   return {
-    subject: `Tu codigo de verificacion — ARUOSAL`,
+    subject: 'Tu codigo de verificacion - ARUOSAL',
     text: [
       `Hola ${name},`,
-      ``,
-      `Tu codigo de verificacion para confirmar tu consentimiento de datos es:`,
-      ``,
+      '',
+      'Tu codigo de verificacion para confirmar tu consentimiento de datos es:',
+      '',
       `    ${code}`,
-      ``,
-      `Este codigo es valido por 10 minutos y solo puede usarse una vez.`,
-      `Si no solicitaste este codigo, ignora este mensaje.`,
-      ``,
-      `Privacidad y bienestar — ARUOSAL`,
+      '',
+      'Este codigo es valido por 10 minutos y solo puede usarse una vez.',
+      'Si no solicitaste este codigo, ignora este mensaje.',
+      '',
+      'Privacidad y bienestar - ARUOSAL',
     ].join('\n'),
     html: `
       <div style="font-family:Inter,-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#F4F8F9;border-radius:16px;">
@@ -54,7 +43,7 @@ export function buildOtpEmail(opts: { code: string; name: string }): Pick<EmailP
           ${code}
         </div>
         <p style="font-size:12px;color:#9BB8C0;margin-top:16px;text-align:center;">
-          Valido 10 minutos · Solo un uso · No compartas este codigo
+          Valido 10 minutos - Solo un uso - No compartas este codigo
         </p>
         <hr style="border:none;border-top:1px solid #D0E2E8;margin:24px 0;" />
         <p style="font-size:12px;color:#9BB8C0;text-align:center;">
@@ -66,12 +55,20 @@ export function buildOtpEmail(opts: { code: string; name: string }): Pick<EmailP
   }
 }
 
-// ─── Envío ────────────────────────────────────────────────────────────────────
-
 export async function sendEmail(payload: EmailPayload): Promise<EmailResult> {
-  // ── Modo desarrollo: solo log ───────────────────────────────────────────────
-  if (process.env.NODE_ENV !== 'production') {
-    const line = '─'.repeat(52)
+  const host = process.env.SMTP_HOST
+  const port = Number(process.env.SMTP_PORT ?? 465)
+  const user = process.env.SMTP_USER
+  const pass = process.env.SMTP_PASS
+  const from = process.env.SMTP_FROM ?? user
+
+  if (!host || !user || !pass || !from) {
+    if (process.env.NODE_ENV === 'production') {
+      console.error('[email] SMTP no configurado. Revisa SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS y SMTP_FROM.')
+      return { ok: false, error: 'Servicio de correo no configurado.' }
+    }
+
+    const line = '-'.repeat(52)
     console.log(`\n${line}`)
     console.log(`[EMAIL DEV] Para:    ${payload.to}`)
     console.log(`[EMAIL DEV] Asunto:  ${payload.subject}`)
@@ -80,25 +77,24 @@ export async function sendEmail(payload: EmailPayload): Promise<EmailResult> {
     return { ok: true }
   }
 
-  // ── Modo producción: Resend ─────────────────────────────────────────────────
-  // Descomentar cuando RESEND_API_KEY esté configurado:
-  //
-  // const { Resend } = await import('resend')
-  // const resend     = new Resend(process.env.RESEND_API_KEY)
-  // try {
-  //   await resend.emails.send({
-  //     from:    process.env.EMAIL_FROM ?? 'noreply@aruosal.app',
-  //     to:      payload.to,
-  //     subject: payload.subject,
-  //     html:    payload.html,
-  //     text:    payload.text,
-  //   })
-  //   return { ok: true }
-  // } catch (err) {
-  //   console.error('[email]', err)
-  //   return { ok: false, error: 'No se pudo enviar el correo de verificacion.' }
-  // }
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure: port === 465,
+    auth: { user, pass },
+  })
 
-  console.warn('[email] Proveedor de correo no configurado en produccion.')
-  return { ok: false, error: 'Servicio de correo no disponible en este momento.' }
+  try {
+    await transporter.sendMail({
+      from,
+      to: payload.to,
+      subject: payload.subject,
+      html: payload.html,
+      text: payload.text,
+    })
+    return { ok: true }
+  } catch (err) {
+    console.error('[email]', err)
+    return { ok: false, error: 'No se pudo enviar el correo de verificacion.' }
+  }
 }
