@@ -8,6 +8,8 @@ out/
 prisma/dev.db
 prisma/dev.db-journal
 
+tsconfig.tsbuildinfo
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
