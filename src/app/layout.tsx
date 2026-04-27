@@ -3,6 +3,8 @@ import { cookies }         from 'next/headers'
 import { ThemeProvider }   from '@/components/providers/ThemeProvider'
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title:       'ARUOSAL — Bienestar en tu turno',
   description: 'Monitoreo de bienestar emocional para trabajadores.',
