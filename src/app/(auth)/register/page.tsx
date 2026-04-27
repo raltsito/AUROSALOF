@@ -63,7 +63,7 @@ export default function RegisterPage() {
       return
     }
 
-    router.push('/consent')
+    router.push('/dashboard')
   }
 
   return (

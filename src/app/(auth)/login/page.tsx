@@ -33,11 +33,7 @@ export default function LoginPage() {
       return
     }
 
-    if (!data.data.has_consent) {
-      router.push('/consent')
-    } else {
-      router.push('/dashboard')
-    }
+    router.push('/dashboard')
   }
 
   return (

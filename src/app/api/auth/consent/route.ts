@@ -20,7 +20,15 @@ export async function POST(req: NextRequest) {
     // Verificar que no tenga consentimiento ya registrado
     const existing = await prisma.consent.findUnique({ where: { user_id: user.id } })
     if (existing) {
-      // Ya tenia consentimiento, redirigir sin error
+      if (!existing.otp_verified) {
+        await prisma.consent.update({
+          where: { user_id: user.id },
+          data:  { otp_verified: true },
+        })
+      }
+
+      const newToken = await createSession({ ...user, has_consent: true })
+      await setSessionCookie(newToken)
       return NextResponse.json({ ok: true })
     }
 
@@ -29,8 +37,7 @@ export async function POST(req: NextRequest) {
         user_id:      user.id,
         version,
         text_hash,
-        otp_verified: false, // Sprint 2: implementar OTP de consentimiento
-        // TODO Sprint 2: registrar ip_address, device_id, otp_code
+        otp_verified: true,
       },
     })
 

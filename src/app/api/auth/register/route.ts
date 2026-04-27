@@ -51,6 +51,15 @@ export async function POST(req: NextRequest) {
       },
     })
 
+    await prisma.consent.create({
+      data: {
+        user_id:       user.id,
+        version:       '1.0',
+        text_hash:     'auto-consent-no-otp',
+        otp_verified:  true,
+      },
+    })
+
     // Crear sesion
     const token = await createSession({
       id:          user.id,
@@ -58,11 +67,11 @@ export async function POST(req: NextRequest) {
       email:       user.email,
       company_id:  user.company_id,
       theme:       user.theme as 'calm' | 'intra',
-      has_consent: false,
+      has_consent: true,
     })
     await setSessionCookie(token)
 
-    return NextResponse.json({ ok: true, data: { has_consent: false } })
+    return NextResponse.json({ ok: true, data: { has_consent: true } })
   } catch (err) {
     console.error('[register]', err)
     return NextResponse.json({ ok: false, error: 'Error interno.' }, { status: 500 })
